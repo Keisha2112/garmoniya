@@ -47,10 +47,11 @@ $phone   = field('phone', 40);
 $project = field('project', 120);
 $message = field('message', 2000);
 
-// Обязательные поля
-if ($name === '' || $phone === '') {
+// Обязательные поля + проверка телефона (не меньше 10 цифр)
+$phoneDigits = preg_replace('/\D/', '', $phone);
+if ($name === '' || strlen($phoneDigits) < 10) {
     http_response_code(422);
-    echo json_encode(['success' => false, 'error' => 'Укажите имя и телефон']);
+    echo json_encode(['success' => false, 'error' => 'Укажите имя и корректный телефон']);
     exit;
 }
 

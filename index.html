@@ -70,15 +70,8 @@
       gap: 20px; height: 70px;
     }
     .brand { display: flex; align-items: center; gap: 12px; }
-    .brand .mark {
-      width: 48px; height: 40px; border-radius: 11px; flex: none;
-      background: linear-gradient(135deg, var(--graphite), #33393f);
-      display: grid; place-items: center;
-      box-shadow: var(--shadow-sm);
-    }
-    .brand .mark-svg { width: 34px; height: 29px; display: block; }
-    .brand .name { font-family: var(--serif); font-size: 21px; font-weight: 700; letter-spacing: .06em; }
-    .brand .sub { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .32em; text-transform: uppercase; color: var(--muted); margin-top: -2px; }
+    .brand-logo { height: 54px; width: auto; display: block; }
+    footer.site .brand-logo { height: 48px; }
 
     .tabs { display: flex; gap: 4px; }
     .tab-btn {
@@ -275,7 +268,6 @@
     /* ── Подвал ────────────────────────────────────────────────── */
     footer.site { background: var(--graphite); color: #aab0b7; margin-top: 20px; }
     footer.site .wrap { padding: 40px 24px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; align-items: center; }
-    footer.site .brand .name, footer.site .brand .mark { color: #fff; }
     footer.site a:hover { color: #fff; }
 
     /* ── Модальное окно проекта ────────────────────────────────── */
@@ -332,32 +324,11 @@
 </head>
 <body>
 
-  <!-- ══════════════════ ЛОГОТИП (SVG-спрайт) ══════════════════
-       Два дома, растущая оранжевая стрелка и зелёная галочка —
-       рост, качество, надёжность. В шапке и подвале через <use>. -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <symbol id="brand-mark" viewBox="0 0 50 42">
-      <g fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 34 H45"/>                        <!-- земля -->
-        <path d="M8 23 L15 16 L22 23"/>              <!-- крыша левого дома -->
-        <path d="M10 23 V34"/>
-        <path d="M20 23 V34"/>
-        <path d="M28 23 L35 16 L42 23"/>             <!-- крыша правого дома -->
-        <path d="M30 23 V34"/>
-        <path d="M40 23 V34"/>
-      </g>
-      <path d="M21.5 34 V15 H18 L25 6 L32 15 H28.5 V34 Z" fill="#d9542b"/>   <!-- растущая стрелка -->
-      <circle cx="14" cy="28" r="5.4" fill="none" stroke="#1f8f4e" stroke-width="2.2"/>
-      <path d="M11.4 28 L13.4 30 L16.7 25.6" fill="none" stroke="#1f8f4e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>  <!-- галочка -->
-    </symbol>
-  </svg>
-
   <!-- ══════════════════ ШАПКА ══════════════════ -->
   <header class="site">
     <div class="wrap nav">
       <a class="brand" href="#" data-tab="home" aria-label="Гармония — на главную">
-        <span class="mark"><svg class="mark-svg" viewBox="0 0 50 42" aria-hidden="true" focusable="false"><use href="#brand-mark"/></svg></span>
-        <span><span class="name">ГАРМОНИЯ</span><span class="sub">клубный посёлок</span></span>
+        <img class="brand-logo" src="img/logo.png" alt="Гармония — строим для жизни" />
       </a>
 
       <nav class="tabs" id="tabs" role="tablist" aria-label="Разделы сайта">
@@ -557,8 +528,7 @@
   <footer class="site">
     <div class="wrap">
       <a class="brand" href="#" data-tab="home">
-        <span class="mark"><svg class="mark-svg" viewBox="0 0 50 42" aria-hidden="true" focusable="false"><use href="#brand-mark"/></svg></span>
-        <span><span class="name">ГАРМОНИЯ</span><span class="sub">клубный посёлок</span></span>
+        <img class="brand-logo" src="img/logo.png" alt="Гармония — строим для жизни" />
       </a>
       <div style="font-size:14px">© <span id="year"></span> Клубный коттеджный посёлок «Гармония». Томск · +7 903 914 34 90</div>
     </div>
@@ -791,7 +761,7 @@
      Бесплатный ключ: https://web3forms.com — введите свою почту, ключ
      придёт письмом. Вставьте его в WEB3FORMS_KEY ниже: заявки будут
      приходить на эту почту. В коде виден только ключ, сам адрес — нет. */
-  const WEB3FORMS_KEY = "ВСТАВЬТЕ-КЛЮЧ-WEB3FORMS";
+  const WEB3FORMS_KEY = "154fe10a-fb5d-41c1-a9a6-5ead8aef69c6";
   document.getElementById("lead-form").addEventListener("submit", async e => {
     e.preventDefault();
     const name = document.getElementById("f-name").value.trim();

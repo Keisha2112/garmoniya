@@ -815,6 +815,7 @@
         e.target.reset();
       } else { throw new Error(data.error || "error"); }
     } catch (err) {
+      console.error("Заявка не отправлена:", err && err.message ? err.message : err);
       note.innerHTML = "Не удалось отправить онлайн. Позвоните или напишите: " +
         "<a href=\"tel:+79039143490\">+7&nbsp;903&nbsp;914&nbsp;34&nbsp;90</a>.";
       note.style.color = "#b4462f";

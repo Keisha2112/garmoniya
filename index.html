@@ -264,7 +264,6 @@
     form.contact-form button { margin-top: 20px; width: 100%; padding: 14px; border: 0; border-radius: 999px; background: var(--graphite); color: #fff; font-weight: 700; font-size: 15px; }
     form.contact-form button:hover { background: #000; }
     .form-note { font-size: 12px; color: var(--muted); margin-top: 12px; }
-    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
     /* ── Подвал ────────────────────────────────────────────────── */
     footer.site { background: var(--graphite); color: #aab0b7; margin-top: 20px; }
@@ -517,7 +516,6 @@
             </select>
             <label for="f-msg">Сообщение <span class="opt">(необязательно)</span></label>
             <textarea id="f-msg" name="message" rows="3" placeholder="Удобное время для показа, вопросы по проекту…"></textarea>
-            <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <button type="submit">Отправить заявку</button>
             <p class="form-note" id="form-note">Заявка придёт на почту менеджеру. Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
           </form>
@@ -786,14 +784,17 @@
     });
   })();
 
-  /* ── Форма заявки → отправка на почту через PHP (send.php) ─────
-     Файл send.php лежит рядом с index.html на хостинге с поддержкой PHP;
-     адрес почты задаётся в нём (переменная $TO_EMAIL).
-     ВНИМАНИЕ: на GitHub Pages PHP не выполняется — нужен обычный хостинг. */
+  /* ── Форма заявки → отправка на почту через Web3Forms ─────────
+     Ключ привязан к вашей почте на web3forms.com; в коде виден только ключ,
+     сам адрес не раскрывается. Работает на любом хостинге, включая
+     GitHub Pages — свой сервер/PHP не нужен. */
+  const WEB3FORMS_KEY = "154fe10a-fb5d-41c1-a9a6-5ead8aef69c6";
   document.getElementById("lead-form").addEventListener("submit", async e => {
     e.preventDefault();
     const name = document.getElementById("f-name").value.trim();
     const phone = document.getElementById("f-phone").value.trim();
+    const project = document.getElementById("f-project").value;
+    const message = document.getElementById("f-msg").value.trim();
     const note = document.getElementById("form-note");
     const btn = e.target.querySelector("button[type=submit]");
     const phoneOk = phone.replace(/\D/g, "").replace(/^[78]/, "").length === 10;
@@ -807,14 +808,24 @@
     const original = btn.textContent;
     btn.disabled = true; btn.textContent = "Отправляем…";
     try {
-      const res = await fetch("send.php", { method: "POST", body: new FormData(e.target) });
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: "Заявка с сайта посёлка «Гармония»",
+          from_name: "Сайт «Гармония»",
+          "Имя": name, "Телефон": phone, "Интересует": project, "Сообщение": message || "—"
+        })
+      });
       const data = await res.json();
       if (data.success) {
         note.textContent = "Спасибо, " + name + "! Заявка отправлена — менеджер свяжется с вами.";
         note.style.color = "#2f7d55";
         e.target.reset();
-      } else { throw new Error(data.error || "error"); }
+      } else { throw new Error(data.message || "error"); }
     } catch (err) {
+      console.error("Заявка не отправлена:", err && err.message ? err.message : err);
       note.innerHTML = "Не удалось отправить онлайн. Позвоните или напишите: " +
         "<a href=\"tel:+79039143490\">+7&nbsp;903&nbsp;914&nbsp;34&nbsp;90</a>.";
       note.style.color = "#b4462f";
